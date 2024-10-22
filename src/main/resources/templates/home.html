@@ -15,7 +15,7 @@
             <a th:href="@{/signup}">회원가입</a>
         </li>
         <li sec:authorize="hasRole('ADMIN')">
-            <a th:href="@{/users}">사용자 관리</a>
+            <a th:href="@{/user/list}">사용자 관리</a>
         </li>
         <li sec:authorize="isAuthenticated()">
             <form th:action="@{/logout}" method="post">
