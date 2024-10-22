@@ -20,7 +20,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/home", "/signup", "/css/**").permitAll()
+                        .requestMatchers("/", "/home", "/signup", "/css/**", "/error/**").permitAll()
                         .requestMatchers("/users", "/user/*/roles", "/user/*/role/**").hasRole("ADMIN")  // 관리자만 사용자 목록 접근 가능
                         .anyRequest().authenticated()
                 )
