@@ -5,12 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Slf4j
@@ -23,14 +19,19 @@ public class SecurityConfig {
         log.info("security config ...");
 
         http
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/", "/home", "/signup", "/css/**").permitAll()
+                        .requestMatchers("/users", "/user/*/roles", "/user/*/role/**").hasRole("ADMIN")  // 관리자만 사용자 목록 접근 가능
+                        .anyRequest().authenticated()
+                )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .defaultSuccessUrl("/")
                         .permitAll()
                 )
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/home").permitAll()
-                        .anyRequest().authenticated()
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/")
+                        .permitAll()
                 );
 
         return http.build();

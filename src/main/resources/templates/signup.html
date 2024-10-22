@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Login</title>
+    <title>회원가입</title>
 </head>
 <body>
 <nav>
@@ -24,27 +24,20 @@
         </li>
     </ul>
 </nav>
-<h1>Login</h1>
+<h2>회원가입</h2>
 
-<div th:if="${param.error}">
-    Invalid username and password.
-</div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-
-<form th:action="@{/login}" method="post">
+<form th:action="@{/signup}" method="post">
     <div>
-        <label>Username: <input type="text" name="username"/></label>
+        <label for="username">사용자명:</label>
+        <input type="text" name="username" required id="username"/>
     </div>
     <div>
-        <label>Password: <input type="password" name="password"/></label>
+        <label for="password">비밀번호:</label>
+        <input type="password" name="password" required id="password"/>
     </div>
-    <div>
-        <input type="submit" value="Login"/>
-    </div>
+    <button type="submit">가입하기</button>
 </form>
 
-<a th:href="@{/}">Back to Home</a>
+<a th:href="@{/login}">로그인</a>
 </body>
 </html>
