@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<title>Home</title>
 </head>
 <body>
 <h1>Welcome to Demo Site</h1>
 
-<div>
-	<a href="/login">Login</a>
+<div sec:authorize="!isAuthenticated()">
+	<a th:href="@{/login}">Login</a>
 </div>
 
-<div>
-	<p>Welcome, hong!</p>
-	<form action="/logout" method="post">
+<div sec:authorize="isAuthenticated()">
+	<p>Welcome, <span sec:authentication="name"></span>!</p>
+	<form th:action="@{/logout}" method="post">
 		<input type="submit" value="Logout">
 	</form>
 </div>

@@ -22,7 +22,7 @@ public class SecurityConfig {
         http
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .defaultSuccessUrl("/")
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .authorizeHttpRequests(authorize -> authorize
