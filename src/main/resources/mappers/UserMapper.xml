@@ -5,4 +5,7 @@
         INSERT INTO tusers (username, password, enabled, role)
         VALUES (#{username}, #{password}, #{enabled}, #{role})
     </insert>
+	<select id="findByUsername" resultType="kr.co.cofile.sbbsecurity.domain.User">
+        SELECT * FROM tusers WHERE username = #{username}
+    </select>
 </mapper>

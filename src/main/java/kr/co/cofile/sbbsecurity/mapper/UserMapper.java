@@ -8,4 +8,5 @@ import kr.co.cofile.sbbsecurity.domain.User;
 public interface UserMapper {
 
 	void save(User user);
+	User findByUsername(String username);
 }
