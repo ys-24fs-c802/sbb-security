@@ -3,6 +3,7 @@ package kr.co.cofile.sbbsecurity.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -22,12 +23,12 @@ public class HomeController {
     }
 	
 	@PostMapping("/login")
-	public void login(@RequestParam("username") String username, @RequestParam("password") String password) {
+	public void login(@ModelAttribute User user) {
 		// 클라이언트에서 전달 받은 사용자
-		log.info(username);
+		log.info(user.toString());
 		// 디비에 등록되어 있는 사용자
-		User member = userMapper.findByUsername(username);
-		if (password.equals(member.getPassword())) {
+		User member = userMapper.findByUsername(user.getUsername());
+		if (user.getPassword().equals(member.getPassword())) {
 			log.info("회원");
 		} else {
 			log.info("비회원");
