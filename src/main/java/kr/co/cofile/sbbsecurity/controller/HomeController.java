@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
-	@GetMapping("/hello")
+	@GetMapping({"/", "/home"})
 	public String hello() {
-		// hello.html <= thymeleaf 역할
-		// templates
-		return "hello";
+		return "home";
+	}
+	
+	@GetMapping("/login")
+	public String login() {
+		return "login";
 	}
 }
