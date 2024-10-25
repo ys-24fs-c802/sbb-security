@@ -1,0 +1,121 @@
+diff --git a/src/main/java/kr/co/cofile/sbbsecurity/controller/HomeController.java b/src/main/java/kr/co/cofile/sbbsecurity/controller/HomeController.java
+index acf378b..c425831 100644
+--- a/src/main/java/kr/co/cofile/sbbsecurity/controller/HomeController.java
++++ b/src/main/java/kr/co/cofile/sbbsecurity/controller/HomeController.java
+@@ -31,8 +31,8 @@ public class HomeController {
+ 
+     // 회원가입 처리
+     @PostMapping("/signup")
+-    public String signup(@RequestParam String username,
+-                         @RequestParam String password) {
++    public String signup(@RequestParam("username") String username,
++                         @RequestParam("password") String password) {
+ 
+         // 사용자 생성
+         User user = new User();
+@@ -59,7 +59,7 @@ public class HomeController {
+ 
+     // 사용자의 권한 목록 조회
+     @GetMapping("/user/{userId}/roles")
+-    public String userRoles(@PathVariable Long userId, Model model) {
++    public String userRoles(@PathVariable("userId") Long userId, Model model) {
+         List<Role> roles = userMapper.findRolesByUserId(userId);
+         String username = userMapper.findById(userId).getUsername();
+ 
+@@ -72,7 +72,7 @@ public class HomeController {
+ 
+     // 선택적: 권한 추가 처리
+     @PostMapping("/user/{userId}/role/add")
+-    public String addRole(@PathVariable Long userId, @RequestParam Long roleId) {
++    public String addRole(@PathVariable("userId") Long userId, @RequestParam("roleId") Long roleId) {
+         userMapper.insertUserRole(userId, roleId);
+         return "redirect:/user/%d/roles".formatted(userId);
+     }
+diff --git a/src/main/java/kr/co/cofile/sbbsecurity/mapper/UserMapper.java b/src/main/java/kr/co/cofile/sbbsecurity/mapper/UserMapper.java
+index 12e3723..e3201c2 100644
+--- a/src/main/java/kr/co/cofile/sbbsecurity/mapper/UserMapper.java
++++ b/src/main/java/kr/co/cofile/sbbsecurity/mapper/UserMapper.java
+@@ -1,18 +1,20 @@
+ package kr.co.cofile.sbbsecurity.mapper;
+ 
+-import kr.co.cofile.sbbsecurity.domain.User;
+-import kr.co.cofile.sbbsecurity.domain.Role;
++import java.util.List;
++
+ import org.apache.ibatis.annotations.Mapper;
++import org.apache.ibatis.annotations.Param;
+ 
+-import java.util.List;
++import kr.co.cofile.sbbsecurity.domain.Role;
++import kr.co.cofile.sbbsecurity.domain.User;
+ 
+ @Mapper
+ public interface UserMapper {
+-    User findByUsername(String username);
++    User findByUsername(@Param("username") String username);
+     void save(User user);
+-    void insertUserRole(Long userId, Long roleId);
+-    List<Role> findRolesByUserId(Long userId);
+-    User findById(Long id);
++    void insertUserRole(@Param("userId") Long userId, @Param("roleId") Long roleId);
++    List<Role> findRolesByUserId(@Param("userId") Long userId);
++    User findById(@Param("id") Long id);
+     List<Role> getAllRoles();
+     List<User> findAll();
+ }
+\ No newline at end of file
+diff --git a/src/main/resources/mappers/UserMapper.xml b/src/main/resources/mappers/UserMapper.xml
+index 76a0354..d8d30d4 100644
+--- a/src/main/resources/mappers/UserMapper.xml
++++ b/src/main/resources/mappers/UserMapper.xml
+@@ -20,27 +20,27 @@
+                u.enabled,
+                r.id as role_id,
+                r.name as role_name
+-        FROM users u
+-                 LEFT JOIN user_roles ur ON u.id = ur.user_id
++        FROM tusers u
++                 LEFT JOIN tuser_roles ur ON u.id = ur.user_id
+                  LEFT JOIN roles r ON ur.role_id = r.id
+         WHERE u.username = #{username}
+     </select>
+ 
+     <insert id="save" parameterType="kr.co.cofile.sbbsecurity.domain.User"
+             useGeneratedKeys="true" keyProperty="id">
+-        INSERT INTO users (username, password, enabled)
++        INSERT INTO tusers (username, password, enabled)
+         VALUES (#{username}, #{password}, #{enabled})
+     </insert>
+ 
+     <insert id="insertUserRole">
+-        INSERT INTO user_roles (user_id, role_id)
++        INSERT INTO tuser_roles (user_id, role_id)
+         VALUES (#{userId}, #{roleId})
+     </insert>
+ 
+     <select id="findRolesByUserId" resultType="kr.co.cofile.sbbsecurity.domain.Role">
+         SELECT r.id, r.name
+         FROM roles r
+-                 JOIN user_roles ur ON r.id = ur.role_id
++                 JOIN tuser_roles ur ON r.id = ur.role_id
+         WHERE ur.user_id = #{userId}
+     </select>
+ 
+@@ -51,14 +51,14 @@
+                u.enabled,
+                r.id as role_id,
+                r.name as role_name
+-        FROM users u
+-                 LEFT JOIN user_roles ur ON u.id = ur.user_id
++        FROM tusers u
++                 LEFT JOIN tuser_roles ur ON u.id = ur.user_id
+                  LEFT JOIN roles r ON ur.role_id = r.id
+         ORDER BY u.id
+     </select>
+ 
+     <select id="findById" resultType="kr.co.cofile.sbbsecurity.domain.User">
+-        SELECT * FROM users WHERE id = #{id}
++        SELECT * FROM tusers WHERE id = #{id}
+     </select>
+ 
+     <select id="getAllRoles" resultType="kr.co.cofile.sbbsecurity.domain.Role">

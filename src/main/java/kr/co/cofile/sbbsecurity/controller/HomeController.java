@@ -31,8 +31,8 @@ public class HomeController {
 
     // 회원가입 처리
     @PostMapping("/signup")
-    public String signup(@RequestParam String username,
-                         @RequestParam String password) {
+    public String signup(@RequestParam("username") String username,
+                         @RequestParam("password") String password) {
 
         // 사용자 생성
         User user = new User();
@@ -59,7 +59,7 @@ public class HomeController {
 
     // 사용자의 권한 목록 조회
     @GetMapping("/user/{userId}/roles")
-    public String userRoles(@PathVariable Long userId, Model model) {
+    public String userRoles(@PathVariable("userId") Long userId, Model model) {
         List<Role> roles = userMapper.findRolesByUserId(userId);
         String username = userMapper.findById(userId).getUsername();
 
@@ -72,7 +72,7 @@ public class HomeController {
 
     // 선택적: 권한 추가 처리
     @PostMapping("/user/{userId}/role/add")
-    public String addRole(@PathVariable Long userId, @RequestParam Long roleId) {
+    public String addRole(@PathVariable("userId") Long userId, @RequestParam("roleId") Long roleId) {
         userMapper.insertUserRole(userId, roleId);
         return "redirect:/user/%d/roles".formatted(userId);
     }

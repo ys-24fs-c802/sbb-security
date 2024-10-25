@@ -20,27 +20,27 @@
                u.enabled,
                r.id as role_id,
                r.name as role_name
-        FROM users u
-                 LEFT JOIN user_roles ur ON u.id = ur.user_id
+        FROM tusers u
+                 LEFT JOIN tuser_roles ur ON u.id = ur.user_id
                  LEFT JOIN roles r ON ur.role_id = r.id
         WHERE u.username = #{username}
     </select>
 
     <insert id="save" parameterType="kr.co.cofile.sbbsecurity.domain.User"
             useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO users (username, password, enabled)
+        INSERT INTO tusers (username, password, enabled)
         VALUES (#{username}, #{password}, #{enabled})
     </insert>
 
     <insert id="insertUserRole">
-        INSERT INTO user_roles (user_id, role_id)
+        INSERT INTO tuser_roles (user_id, role_id)
         VALUES (#{userId}, #{roleId})
     </insert>
 
     <select id="findRolesByUserId" resultType="kr.co.cofile.sbbsecurity.domain.Role">
         SELECT r.id, r.name
         FROM roles r
-                 JOIN user_roles ur ON r.id = ur.role_id
+                 JOIN tuser_roles ur ON r.id = ur.role_id
         WHERE ur.user_id = #{userId}
     </select>
 
@@ -51,14 +51,14 @@
                u.enabled,
                r.id as role_id,
                r.name as role_name
-        FROM users u
-                 LEFT JOIN user_roles ur ON u.id = ur.user_id
+        FROM tusers u
+                 LEFT JOIN tuser_roles ur ON u.id = ur.user_id
                  LEFT JOIN roles r ON ur.role_id = r.id
         ORDER BY u.id
     </select>
 
     <select id="findById" resultType="kr.co.cofile.sbbsecurity.domain.User">
-        SELECT * FROM users WHERE id = #{id}
+        SELECT * FROM tusers WHERE id = #{id}
     </select>
 
     <select id="getAllRoles" resultType="kr.co.cofile.sbbsecurity.domain.Role">
