@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.cofile.sbbsecurity.mapper.UserMapper">
-	<insert id="save" parameterType="kr.co.cofile.sbbsecurity.domain.User">
-        INSERT INTO tusers (username, password, enabled, role)
-        VALUES (#{username}, #{password}, #{enabled}, #{role})
+	<insert id="save" parameterType="kr.co.cofile.sbbsecurity.domain.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tusers (username, password, enabled)
+        VALUES (#{username}, #{password}, #{enabled})
+    </insert>
+    <insert id="insertUserRole">
+        INSERT INTO tuser_roles (user_id, role_id)
+        VALUES (#{userId}, #{roleId})
     </insert>
 	<select id="findByUsername" resultType="kr.co.cofile.sbbsecurity.domain.User">
         SELECT * FROM tusers WHERE username = #{username}
