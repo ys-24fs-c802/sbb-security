@@ -6,9 +6,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.co.cofile.sbbsecurity.domain.Role;
 import kr.co.cofile.sbbsecurity.domain.User;
 import kr.co.cofile.sbbsecurity.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -61,4 +63,19 @@ public class HomeController {
 		model.addAttribute("users", users);
 		return "user-list";
 	}
+	
+	// 사용자의 권한 목록 조회
+    @GetMapping("/user/{userId}/roles")
+    public String userRoles(@PathVariable("userId") Long userId, Model model) {
+        List<Role> roles = userMapper.findRolesByUserId(userId);
+        String username = userMapper.findById(userId).getUsername();
+        List<Role> allRoles = userMapper.getAllRoles();
+        
+        model.addAttribute("allRoles", allRoles);
+        model.addAttribute("roles", roles);
+        model.addAttribute("username", username);
+        model.addAttribute("userId", userId);
+
+        return "user-roles";
+    }
 }

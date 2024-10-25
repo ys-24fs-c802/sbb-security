@@ -43,7 +43,8 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 				<span  th:each="role: ${user.roles}" th:text="${role.name + ' '}"></span>
 			</td>
 			<td th:text="${user.enabled}"></td>
-			<td>권한관리 버튼</td>
+			<td><a th:href="@{/user/{id}/roles(id=${user.id})}"
+               class="btn btn-sm btn-info">권한 관리</a></td>
 		</tr>
 	</tbody>
 </table>
