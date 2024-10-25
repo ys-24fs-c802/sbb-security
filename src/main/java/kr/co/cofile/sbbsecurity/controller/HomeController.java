@@ -1,7 +1,10 @@
 package kr.co.cofile.sbbsecurity.controller;
 
+import java.util.List;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,5 +53,12 @@ public class HomeController {
 		userMapper.insertUserRole(user.getId(), 1L);
 		
 		return "redirect:/login";
+	}
+	
+	@GetMapping("/users")
+	public String userList(Model model) {
+		List<User> users = userMapper.findAll();
+		model.addAttribute("users", users);
+		return "user-list";
 	}
 }
