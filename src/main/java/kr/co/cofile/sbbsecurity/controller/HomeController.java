@@ -78,4 +78,10 @@ public class HomeController {
 
         return "user-roles";
     }
+    
+    @PostMapping("/user/{userId}/role/add")
+    public String addRole(@PathVariable("userId") Long userId, @RequestParam("roleId") Long roleId) {
+        userMapper.insertUserRole(userId, roleId);
+        return "redirect:/user/%d/roles".formatted(userId);
+    }
 }
