@@ -11,4 +11,5 @@ public interface UserMapper {
 	void save(User user);
 	void insertUserRole(@Param("userId") Long userId, @Param("roleId") Long roleId);
 	User findByUsername(String username);
+	
 }
